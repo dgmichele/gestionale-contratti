@@ -17,9 +17,9 @@ export default {
         port: process.env.DB_PORT
       },
   migrations: {
-    directory: './db/migrations',
+    directory: './migrations',
   },
   seeds: {
-    directory: './db/seeds',
+    directory: './seeds',
   }
 };
