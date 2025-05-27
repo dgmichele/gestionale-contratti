@@ -71,3 +71,22 @@ export async function login(req, res) {
     res.status(500).json({ error: 'Errore interno nel login' });
   }
 }
+
+// Ottieni l'utente che fa l'accesso
+export async function getMe(req, res) {
+  try {
+    const user = await db('utenti')
+      .select('id', 'nome', 'email') // escludiamo la password
+      .where({ id: req.user.id })
+      .first();
+
+    if (!user) {
+      return res.status(404).json({ message: 'Utente non trovato' });
+    }
+
+    res.json(user);
+  } catch (err) {
+    console.error('Errore in GET /me:', err);
+    res.status(500).json({ message: 'Errore nel recupero dei dati utente' });
+  }
+}
