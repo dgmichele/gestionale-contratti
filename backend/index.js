@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes.js';
+import contractRoutes from './routes/contractRoutes.js';
 
 dotenv.config({
   path: process.env.NODE_ENV === 'production' ? '.env.production' : '.env.dev'
@@ -16,13 +17,14 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// Base route
+// Rotta base di test
 app.get('/', (req, res) => {
   res.send('API pronta per partire!');
 });
 
 // Rotte
-app.use(authRoutes); // Registrazione
+app.use(authRoutes); // gestione API autenticazione
+app.use(contractRoutes); // gestione API contratti
  
 // Avvio server
 app.listen(PORT, () => {
