@@ -77,7 +77,7 @@ export default function RegisterPage() {
 
       <p>
         Hai già un account?{" "}
-        <Link to="/login">Effetta il login!</Link>
+        <Link to="/login">Effettua il login!</Link>
       </p>
     </div>
   );
