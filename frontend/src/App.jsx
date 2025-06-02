@@ -1,30 +1,36 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-function App() {
-  const [apiMessage, setApiMessage] = useState('');
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import HomePage from './pages/HomePage';
+import NotFoundPage from './pages/NotFoundPage';
+import ProtectedRoute from './pages/ProtectedRoute';
+import PrivateLayout from './layouts/PrivateLayout';
 
-  useEffect(() => {
-    const fetchMessage = async () => {
-      try {
-        const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/`);
-        setApiMessage(res.data); // dovrebbe essere "API pronta per partire!"
-      } catch (err) {
-        console.error('Errore nella chiamata API:', err);
-        setApiMessage('Errore nel collegamento al server!');
-      }
-    };
-
-    fetchMessage();
-  }, []);
-
+export default function App() {
   return (
-    <div>
-      <h1>Benvenuto!</h1>
-      <p>{apiMessage}</p>
-    </div>
+    <Router>
+      <Routes>
+        {/* Rotte pubbliche */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+
+        {/* Rotte protette */}
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <PrivateLayout>
+                <HomePage />
+              </PrivateLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Rotta 404 */}
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </Router>
   );
 }
-
-export default App;
-
