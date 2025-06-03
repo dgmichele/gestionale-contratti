@@ -3,7 +3,7 @@ import { Navigate, Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
 export default function LoginPage() {
-  const { login, isLoggedIn } = useAuth();
+  const { login, isLoggedIn, logoutMessage } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -33,6 +33,13 @@ export default function LoginPage() {
   return (
     <div>
       <h1>Login</h1>
+
+      {logoutMessage && (
+        <div>
+          <p>{logoutMessage}</p>
+        </div>
+      )}
+
       <form onSubmit={handleSubmit}>
         <input
           type="email"

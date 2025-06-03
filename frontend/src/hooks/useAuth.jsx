@@ -8,15 +8,20 @@ export function useAuth() {
   const queryClient = useQueryClient();
 
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // nuovo stato
+  const [loading, setLoading] = useState(true); 
+  const [logoutMessage, setLogoutMessage] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       api.get('/me')
         .then(res => setUser(res.data))
-        .catch(() => {
-          logout(); // se token non valido
+        .catch((error) => {
+          if (error.name === 'TokenExpiredError') {
+          logout('La tua sessione è scaduta. Effettua di nuovo l’accesso.'); // logout chiama navigate('/login')
+          } else {
+          console.error('Errore imprevisto:', error);
+          }
         })
         .finally(() => setLoading(false)); // fine caricamento
     } else {
@@ -39,10 +44,11 @@ export function useAuth() {
     navigate('/');
   };
 
-  const logout = () => {
+  const logout = (message = null) => {
     localStorage.removeItem('token');
     setUser(null);
     queryClient.clear();
+    if (message) setLogoutMessage(message);
     navigate('/login');
   };
 
@@ -52,6 +58,7 @@ export function useAuth() {
     loading, // esporta loading
     login,
     logout,
+    logoutMessage,
     register
   };
 }

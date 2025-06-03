@@ -20,4 +20,18 @@ api.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
+// Intercetta errori 401 (token scaduto)
+api.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response?.status === 401) {
+      // Creiamo un errore specifico che potrà essere intercettato dal frontend
+      const customError = new Error('TOKEN_EXPIRED');
+      customError.name = 'TokenExpiredError';
+      return Promise.reject(customError);
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default api;
