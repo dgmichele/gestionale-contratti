@@ -6,13 +6,13 @@ export async function getContratti(req, res) {
 
   // Paginazione risultati
   const page = parseInt(req.query.page) || 1; // recupera pagina
-  const limit = parseInt(req.query.limit) || 12; // recupera max risultati
+  const limit = parseInt(req.query.limit) || 11; // recupera max risultati
   const offset = (page - 1) * limit; // calcolo offset
 
   try {
     const contratto = await db('contratti')
       .where({ utente_id: userId })
-      .orderBy('data_scadenza', 'asc') // ordina in ordine ascendente
+      .orderBy('created_at', 'desc')
       .limit(limit)
       .offset(offset);
 
