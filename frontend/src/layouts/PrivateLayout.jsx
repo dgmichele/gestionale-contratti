@@ -5,12 +5,12 @@ import Footer from '../components/Footer';
 
 export default function PrivateLayout({ children }) {
   return (
-    <div>
+    <>
       <Header />
-      <main>
-        {children || <Outlet />}
-      </main>
+        <main>
+          {children || <Outlet />}
+        </main>
       <Footer />
-    </div>
+    </>
   );
 }
