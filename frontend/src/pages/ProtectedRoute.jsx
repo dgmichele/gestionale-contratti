@@ -29,7 +29,7 @@ export default function ProtectedRoute({ children }) {
     if (showServerStartMessage) {
       return <p>🕛 Attendi 50 secondi, sto avviando il server...</p>;
     }
-    return <p>⚠️ Verifica autenticazione in corso...</p>;
+    return <p>🔁 Recupero i dati...</p>;
   }
 
   if (!user) {
