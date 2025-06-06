@@ -1,30 +1,122 @@
+import { useEffect, useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useContracts } from '../hooks/useContracts';
+import ContractCard from '../components/ContractCard';
+import PopupAddAndChangeContract from '../components/PopupAddAndChangeContract';
+import PopupDeleteContract from '../components/PopupDeleteContract';
+import styles from '../asset/css/HomePage.module.css';
 
 export default function HomePage() {
   const { user } = useAuth();
-  const { contratti, isLoading, error } = useContracts();
+
+  const [isMobile, setIsMobile] = useState(false);
+  const [popupMode, setPopupMode] = useState('add'); // logica per usare stesso popup per creazione e modifica contratto
+  const [isAddAndChangePopupVisible, setIsAddAndChangePopupVisible] = useState(false);
+  const [isDeletePopupVisible, setIsDeletePopupVisible] = useState(false);
+  const [selectedContract, setSelectedContract] = useState(null);
+
+  // Mobile detection
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const limit = isMobile ? 6 : 11;
+
+  // Passiamo il limite a useContracts
+  const {
+    contratti,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
+  } = useContracts(limit);
+
+  const visibleContracts = contratti;
+
+  const openAddPopup = () => {
+    setPopupMode('add');
+    setSelectedContract(null);
+    setIsAddAndChangePopupVisible(true);
+  };
+
+  const openChangePopup = (contratto) => {
+    setPopupMode('edit');
+    setSelectedContract(contratto);
+    setIsAddAndChangePopupVisible(true);
+  };
+
+  const closeAddAndChangePopup = () => {
+    setIsAddAndChangePopupVisible(false);
+  };
+
+  const openDeletePopup = (contratto) => {
+    setSelectedContract(contratto);
+    setIsDeletePopupVisible(true);
+  };
+
+  const closeDeletePopup = () => {
+    setIsDeletePopupVisible(false);
+  };
 
   return (
-    <div>
-      <h1>Benvenuto, {user?.nome || 'utente'}!</h1>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Benvenuto, {user?.nome || 'utente'}!</h1>
 
-      {isLoading && <p>Caricamento contratti...</p>}
-      {error && <p>Errore nel caricamento dei contratti</p>}
+      {isLoading && <p className={styles.status}>Caricamento contratti...</p>}
+      {error && <p className={styles.status}>Errore nel caricamento dei contratti</p>}
 
-      <h2>I tuoi contratti:</h2>
+      {!isLoading && !error && (
+        <>
+          <h2 className={styles.subtitle}>I tuoi contratti:</h2>
 
-      <ul>
-        {contratti.map((c) => (
-          <li key={c.id}>
-            {c.nome} {c.cognome} – Scade il {c.data_scadenza}
-          </li>
-        ))}
-      </ul>
+          {contratti.length === 0 ? (
+            <>
+            <p className={styles.status}>Non hai ancora nessun contratto salvato, crealo adesso.</p>
+            <button className={styles.addCardButton} onClick={openAddPopup}>Aggiungi un contratto</button>
+            </>
+          ) : (
+            <div className={styles.grid}>
+              {visibleContracts.map((contratto) => (
+                <ContractCard
+                  key={contratto.id}
+                  contratto={contratto}
+                  onEdit={openChangePopup}
+                  onDelete={openDeletePopup}
+                />
+              ))}
+                <button className={styles.addCardPlus} onClick={openAddPopup}>
+                  +
+                </button>
+            </div>
+          )}
 
-      {contratti.length === 0 && !isLoading && !error && (
-        <p>Nessun contratto trovato.</p>
+          {/* Bottone "Carica altri" se ci sono altri da caricare */}
+          {hasNextPage && (
+            <button className={styles.loadMoreBtn} onClick={fetchNextPage} disabled={isFetchingNextPage}>
+              {isFetchingNextPage ? 'Caricamento...' : 'Carica altri'}
+            </button>
+          )}
+        </>
       )}
+
+      {isAddAndChangePopupVisible && (
+        <PopupAddAndChangeContract
+          mode={popupMode}
+          initialData={selectedContract}
+          onClose={closeAddAndChangePopup}
+        />
+      )}
+
+      {isDeletePopupVisible && (
+        <PopupDeleteContract
+          contrattoId={selectedContract?.id}
+          onClose={closeDeletePopup}
+        />
+      )}     
     </div>
   );
 }

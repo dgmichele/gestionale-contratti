@@ -1,19 +1,34 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../services/api';
 
-export function useContracts() {
+// const LIMIT = 11; // lato backend deve corrispondere a limit default
+
+export function useContracts(limit) {
   const queryClient = useQueryClient();
 
-  // GET - Recupera i contratti dell’utente
-  const { data: contratti = [], isLoading, error } = useQuery({
-    queryKey: ['contratti'],
-    queryFn: async () => {
-      const res = await api.get('/contratti');
+  // GET - Recupera contratti paginati
+ const {
+    data,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
+  } = useInfiniteQuery({
+    queryKey: ['contratti', limit],
+    queryFn: async ({ pageParam = 1 }) => {
+      const res = await api.get(`/contratti?page=${pageParam}&limit=${limit}`);
       return res.data;
+    },
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage.length === limit ? allPages.length + 1 : undefined;
     }
   });
 
-  // POST - Aggiungi un nuovo contratto
+  // Trasformiamo i contratti da tutte le pagine in un unico array piatto
+  const contratti = data ? data.pages.flat() : [];
+
+  // POST - Aggiungi contratto
   const addContract = useMutation({
     mutationFn: async (nuovoContratto) => {
       const res = await api.post('/contratti', nuovoContratto);
@@ -24,7 +39,7 @@ export function useContracts() {
     }
   });
 
-  // PUT - Modifica un contratto esistente
+  // PUT - Modifica contratto
   const updateContract = useMutation({
     mutationFn: async ({ id, ...dati }) => {
       const res = await api.put(`/contratti/${id}`, dati);
@@ -35,7 +50,7 @@ export function useContracts() {
     }
   });
 
-  // DELETE - Elimina un contratto
+  // DELETE - Elimina contratto
   const deleteContract = useMutation({
     mutationFn: async (id) => {
       const res = await api.delete(`/contratti/${id}`);
@@ -52,6 +67,9 @@ export function useContracts() {
     error,
     addContract,
     updateContract,
-    deleteContract
+    deleteContract,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
   };
 }
