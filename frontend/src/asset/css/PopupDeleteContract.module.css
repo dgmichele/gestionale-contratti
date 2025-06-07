@@ -4,7 +4,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -21,7 +21,7 @@
 }
 
 .popup {
-  background: white;
+  background: #fffbfc;
   border-radius: 12px;
   padding: 2rem;
   max-width: 500px;
@@ -36,4 +36,35 @@
 
 .slideOut {
   transform: translateY(100px);
+}
+
+.title{
+  text-align: center;
+}
+
+.subtitle{
+  text-align: center;
+  margin-top: 10px;
+}
+
+.buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.confirm{
+  padding: 5px 20px 5px 20px;
+}
+
+.cancel{
+  background-color: transparent;
+  color: #b41c3c;
+  transition: color 0.3s ease;
+
+  &:hover{
+    background-color: transparent;
+    color: #1e1e1e;
+  }
 }

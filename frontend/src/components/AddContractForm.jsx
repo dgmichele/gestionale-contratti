@@ -30,26 +30,15 @@ export default function AddContractForm({ mode, initialData, onSubmit, onCancel 
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
-      <h2>{mode === 'edit' ? 'Modifica Contratto' : 'Aggiungi Contratto'}</h2>
+      <h2 className={styles.title}>{mode === 'edit' ? 'Modifica contratto:' : 'Aggiungi contratto:'}</h2>
 
-      <label>
-        Nome:
-        <input name="nome" value={formData.nome} onChange={handleChange} required />
-      </label>
-
-      <label>
-        Cognome:
-        <input name="cognome" value={formData.cognome} onChange={handleChange} required />
-      </label>
-
-      <label>
-        Data Scadenza:
-        <input type="date" name="data_scadenza" value={formData.data_scadenza} onChange={handleChange} required />
-      </label>
+        <input name="nome" placeholder='Nome' value={formData.nome} onChange={handleChange} required />
+        <input name="cognome" placeholder='Cognome' value={formData.cognome} onChange={handleChange} required />
+        <input type="date" placeholder='Data di scadenza' name="data_scadenza" value={formData.data_scadenza} onChange={handleChange} required />
 
       <div className={styles.buttons}>
-        <button type="submit">Salva</button>
-        <button type="button" onClick={onCancel}>Annulla</button>
+        <button className={styles.save} type="submit">Salva</button>
+        <button className={styles.cancel} type="button" onClick={onCancel}>Annulla</button>
       </div>
     </form>
   );

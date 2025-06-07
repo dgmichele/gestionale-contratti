@@ -1,55 +1,95 @@
 .container {
-  padding: 1rem;
+  padding: 2rem 1.2rem 4rem 1.2rem; 
 }
 
 .title {
-  font-size: 2rem;
   margin-bottom: 1rem;
 }
 
 .subtitle {
-  font-size: 1.5rem;
-  margin: 1.5rem 0 0.5rem;
+  margin-top: 40px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #1e1e1e;
 }
 
-.status {
-  margin: 1rem 0;
-  color: #555;
+.noContracts{
+  margin-top: 20px;
 }
 
-/* Griglia responsive */
+.loadMoreBtnContainer{
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.loadMoreBtn{
+  padding: 10px 20px;
+}
+
+.addCardButton{
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+}
+
 .grid {
   display: grid;
-  grid-template-columns: repeat(1, 1fr); /* mobile */
+  grid-template-columns: repeat(1, 1fr); 
   gap: 1rem;
-  margin-top: 1rem;
+  margin-top: 2rem;
 }
 
+/* tablet */
 @media (min-width: 768px) {
   .grid {
-    grid-template-columns: repeat(3, 1fr); /* tablet */
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 2rem;
   }
+
+  .container {
+  padding: 4rem 2rem 6rem 2rem; 
+  }
+
+  .subtitle {
+  font-size: 1.4rem;
+  font-weight: 500;
+}
 }
 
-@media (min-width: 1024px) {
+/* desktop */
+@media (min-width: 1026px) {
   .grid {
-    grid-template-columns: repeat(4, 1fr); /* desktop */
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 2rem;
   }
+
+  .container {
+  padding: 4rem 0 6rem 0; 
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  }
+
 }
 
 /* Bottone "+" come card */
 .addCardPlus {
   display: flex;
+  color: #d2778a;
   align-items: center;
   justify-content: center;
   font-size: 2rem;
-  background-color: #f0f0f0;
-  border: 2px dashed #999;
+  background-color: #fffbfc;
+  border: 2px dashed #d2778a;
   border-radius: 0.5rem;
   cursor: pointer;
   transition: background 0.3s;
-}
 
-.addCardPlus:hover {
-  background-color: #e0f7ff;
+  &:hover{
+      background-color: #f0d6da;
+  }
+  &:focus{
+      background-color: #f0d6da;
+  }
 }

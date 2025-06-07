@@ -17,7 +17,7 @@ export default function HomePage() {
 
   // Mobile detection
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
@@ -64,18 +64,18 @@ export default function HomePage() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Benvenuto, {user?.nome || 'utente'}!</h1>
+      <h1 className={styles.title}>Bentornato, {user?.nome || 'utente'}!</h1>
 
-      {isLoading && <p className={styles.status}>Caricamento contratti...</p>}
-      {error && <p className={styles.status}>Errore nel caricamento dei contratti</p>}
+      {isLoading && <p className={styles.status}>🔁 Caricamento contratti...</p>}
+      {error && <p className={styles.status}>❌ Errore nel caricamento dei contratti</p>}
 
       {!isLoading && !error && (
         <>
-          <h2 className={styles.subtitle}>I tuoi contratti:</h2>
+          <p className={styles.subtitle}>I tuoi contratti:</p>
 
           {contratti.length === 0 ? (
             <>
-            <p className={styles.status}>Non hai ancora nessun contratto salvato, crealo adesso.</p>
+            <p className={styles.noContracts}>Non hai ancora nessun contratto salvato, crealo adesso.</p>
             <button className={styles.addCardButton} onClick={openAddPopup}>Aggiungi un contratto</button>
             </>
           ) : (
@@ -94,12 +94,14 @@ export default function HomePage() {
             </div>
           )}
 
-          {/* Bottone "Carica altri" se ci sono altri da caricare */}
-          {hasNextPage && (
+          <div className={styles.loadMoreBtnContainer}>
+             {hasNextPage && (
             <button className={styles.loadMoreBtn} onClick={fetchNextPage} disabled={isFetchingNextPage}>
-              {isFetchingNextPage ? 'Caricamento...' : 'Carica altri'}
+              {isFetchingNextPage ? 'Caricamento...' : 'Carica altri contratti'}
             </button>
-          )}
+            )}
+          </div>
+
         </>
       )}
 

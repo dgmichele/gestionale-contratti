@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { Navigate } from 'react-router-dom';
+import styles from '../asset/css/ProtectedRoute.module.css'
 
 export default function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -27,9 +28,9 @@ export default function ProtectedRoute({ children }) {
 
   if (loading) {
     if (showServerStartMessage) {
-      return <p>🕛 Attendi 50 secondi, sto avviando il server...</p>;
+      return <p className={styles.status}>🕛 Attendi 50 secondi, sto avviando il server...</p>;
     }
-    return <p>🔁 Recupero i dati...</p>;
+    return <p className={styles.status}>🔁 Recupero i dati...</p>;
   }
 
   if (!user) {

@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navigate, Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import logo from '../asset/images/Logo.webp';
+import styles from '../asset/css/RegisterPage.module.css';
 
 export default function RegisterPage() {
   const { login, isLoggedIn, register } = useAuth(); 
@@ -10,6 +12,22 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showServerStartMessage, setShowServerStartMessage] = useState(false);  // gestione server dormiente Render
+
+  // useEffect per attivare il messaggio dopo 5 secondi di loading
+  useEffect(() => {
+    let timer;
+
+    if (loading) {
+      timer = setTimeout(() => {
+        setShowServerStartMessage(true);
+      }, 5000);
+    } else {
+      setShowServerStartMessage(false);
+    }
+
+    return () => clearTimeout(timer);
+  }, [loading]);
 
   if (isLoggedIn) {
     return <Navigate to="/" replace />;
@@ -23,63 +41,78 @@ export default function RegisterPage() {
     try {
       console.log("📦 Dati inviati:", { nome, email, password });
 
-      // Usa la funzione centralizzata da useAuth
       await register({ nome, email, password });
-
-      // Login automatico dopo registrazione
-      await login({ email, password });
+      await login({ email, password }); // login automatico
 
     } catch (err) {
       console.error("❌ Errore registrazione:", err);
       setError(err.response?.data?.message || "Errore durante la registrazione");
     } finally {
-      setLoading(false); // evita blocco infinito
+      setLoading(false);
     }
   };
 
   return (
-    <div>
-      <h1>Registrazione</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Nome"
-          value={nome}
-          onChange={(e) => setNome(e.target.value)}
-          required
-          disabled={loading}
-        />
+    <>
+      <div className={styles.container}>
+        <div className={styles.formContainer}>
+          <img className={styles.logo} src={logo} alt="logo" />
+          <h1>Registrati</h1>
+          <p>Gestisci i tuoi contratti in un unico posto.</p>
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          disabled={loading}
-        />
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              placeholder="Nome"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+              required
+              disabled={loading}
+            />
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          disabled={loading}
-        />
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              disabled={loading}
+            />
 
-        <button type="submit" disabled={loading}>Registrati</button>
-      </form>
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              disabled={loading}
+            />
 
-      <p>{loading && "Registrazione in corso..."}</p>
+            <button className={styles.submit} type="submit" disabled={loading}>
+              Registrati
+            </button>
+          </form>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+          <p className={styles.auth}>
+            {loading && (
+              showServerStartMessage
+                ? "🕛 Il server si sta avviando, attendi circa 50 secondi..."
+                : "Registrazione in corso..."
+            )}
+          </p>
 
-      <p>
-        Hai già un account?{" "}
-        <Link to="/login">Effettua il login!</Link>
-      </p>
-    </div>
+          {error && <p style={{ color: "red" }}>{error}</p>}
+
+          <p>
+            Hai già un account?{" "}
+            <Link to="/login">Effettua il login!</Link>
+          </p>
+        </div>
+      </div>
+
+      <footer>
+        <p>© {new Date().getFullYear()} Bich Immobiliare. Tutti i diritti riservati.</p>
+      </footer>
+    </>
   );
 }
-

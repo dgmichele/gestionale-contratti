@@ -1,0 +1,103 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-left: -10px;
+  align-items: center;
+  padding: 0.7rem 1.5rem;
+  background-color: #fffbfc;
+  position: relative;
+  box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);
+}
+
+.logo {
+  width: 50px;
+}
+
+@media (min-width: 768px) {
+  .logo {
+    width: 75px;
+    margin-left: -5px;
+  }
+}
+
+@media (min-width: 1026px) {
+  .header{
+    padding: 0.7rem 8rem;
+  }
+
+  .logo {
+    width: 75px;
+    margin-left: 0;
+  }
+}
+
+.userIconWrapper {
+  position: relative;
+  cursor: pointer;
+}
+
+.userIcon {
+  font-size: 2rem;
+  color: #5f5f5f;
+  transition: color 0.3s ease;
+
+  &:hover{
+    color:#1e1e1e;
+  }
+  &:focus{
+    color:#1e1e1e;
+  }
+}
+
+/* MENU UTENTE */
+.userMenu {
+  position: absolute;
+  top: 130%;
+  right: 0;
+  background-color: #fffbfc;
+  border-radius: 0.5rem;
+  padding: 1.2rem;
+  width: 250px;
+  box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);
+
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+
+  z-index: 1000;
+}
+
+/* QUANDO VISIBILE */
+.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* QUANDO NASCOSTO */
+.hide {
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+}
+
+.userName {
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+  color: #1e1e1e;
+}
+
+.userEmail {
+  font-size: 0.9rem;
+  color: #5f5f5f;
+  margin-bottom: 0.7rem;
+}
+
+.logoutButton {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  width: 100%;
+  font-size: 0.9rem;
+}

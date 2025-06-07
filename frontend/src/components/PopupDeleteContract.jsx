@@ -33,10 +33,11 @@ export default function PopupDeleteContract({ contrattoId, onClose }) {
   return (
     <div className={`${styles.overlay} ${visible ? styles.fadeIn : styles.fadeOut}`}>
       <div className={`${styles.popup} ${visible ? styles.slideIn : styles.slideOut}`}>
-        <h2>Confermi l'eliminazione?</h2>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
-          <button onClick={handleConfirm}>Conferma</button>
-          <button onClick={handleClose}>Annulla</button>
+        <h2 className={styles.title}>Confermi l'eliminazione?</h2>
+        <p className={styles.subtitle}>L'azione sarà irreversibile e dovrai ricreare il contratto.</p>
+        <div className={styles.buttons}>
+          <button className={styles.confirm} onClick={handleConfirm}>Conferma</button>
+          <button className={styles.cancel} onClick={handleClose}>Annulla</button>
         </div>
         {errorMsg && <p style={{ color: 'red', marginTop: '10px' }}>{errorMsg}</p>}
       </div>

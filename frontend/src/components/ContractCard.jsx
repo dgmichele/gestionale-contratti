@@ -1,5 +1,6 @@
-// ContractCard.jsx
 import styles from '../asset/css/ContractCard.module.css';
+import { FaPencilAlt } from "react-icons/fa";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 function ContractCard({ contratto, onEdit, onDelete }) {
   const isExpired = new Date(contratto.data_scadenza) < new Date();
@@ -18,12 +19,12 @@ function ContractCard({ contratto, onEdit, onDelete }) {
       <h3>{contratto.nome} {contratto.cognome}</h3>
       <p>
         Scade il: {formattedData(contratto.data_scadenza)}
-        {isExpired && <p style={{ color: 'red', marginLeft: '5px' }}>🚨 Contratto scaduto!</p>}
+        {isExpired && <p className={styles.isExpired}>Contratto scaduto! 🚨</p>}
       </p>
 
       <div className={styles.actions}>
-        <button onClick={() => onEdit(contratto)}>✏️</button>
-        <button onClick={() => onDelete(contratto)}>🗑️</button>
+        <FaPencilAlt className={styles.edit} onClick={() => onEdit(contratto)}/>
+        <FaRegTrashAlt className={styles.delete} onClick={() => onDelete(contratto)}/>
       </div>
     </div>
   );
