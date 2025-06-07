@@ -34,7 +34,20 @@ export default function AddContractForm({ mode, initialData, onSubmit, onCancel 
 
         <input name="nome" placeholder='Nome' value={formData.nome} onChange={handleChange} required />
         <input name="cognome" placeholder='Cognome' value={formData.cognome} onChange={handleChange} required />
-        <input type="date" placeholder='Data di scadenza' name="data_scadenza" value={formData.data_scadenza} onChange={handleChange} required />
+        <input
+          type={mode === 'edit' ? 'date' : 'text'}
+          name="data_scadenza"
+          placeholder={mode === 'edit' ? '' : 'Data di scadenza'}
+          value={formData.data_scadenza}
+          onChange={handleChange}
+          onFocus={(e) => {
+            if (mode !== 'edit') e.target.type = 'date';
+          }}
+          onBlur={(e) => {
+            if (mode !== 'edit' && !e.target.value) e.target.type = 'text';
+          }}
+          required
+        />
 
       <div className={styles.buttons}>
         <button className={styles.save} type="submit">Salva</button>
