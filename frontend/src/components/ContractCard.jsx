@@ -17,10 +17,8 @@ function ContractCard({ contratto, onEdit, onDelete }) {
   return (
     <div className={styles.card}>
       <h3>{contratto.nome} {contratto.cognome}</h3>
-      <p>
-        Scade il: {formattedData(contratto.data_scadenza)}
-        {isExpired && <p className={styles.isExpired}>Contratto scaduto! 🚨</p>}
-      </p>
+      <p>Scade il: {formattedData(contratto.data_scadenza)}</p>
+      {isExpired && <p className={styles.isExpired}>⚠️ Scaduto!</p>}
 
       <div className={styles.actions}>
         <FaPencilAlt className={styles.edit} onClick={() => onEdit(contratto)}/>

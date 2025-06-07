@@ -44,7 +44,7 @@
 @media (min-width: 768px) {
   .grid {
     grid-template-columns: repeat(3, 1fr); 
-    gap: 2rem;
+    gap: 1.5rem;
   }
 
   .container {
