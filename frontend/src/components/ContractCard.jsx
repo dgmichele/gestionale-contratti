@@ -9,7 +9,7 @@ function ContractCard({ contratto, onEdit, onDelete }) {
     const data = new Date(dataISO);
     return new Intl.DateTimeFormat('it-IT', {
       day: 'numeric',
-      month: 'long',
+      month: 'numeric',
       year: 'numeric'
     }).format(data);
   };

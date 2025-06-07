@@ -21,6 +21,11 @@ input {
   margin-top: 10px;
 }
 
+.dateDetail{
+  margin-top: -10px;
+  color: #9c9c9c;
+}
+
 .save{
   padding: 10px 20px 10px 20px;
 }
