@@ -72,6 +72,26 @@ export async function login(req, res) {
   }
 }
 
+// Logout
+export async function logout(req, res) {
+  try {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+      return res.status(400).json({ message: 'Token mancante' });
+    }
+
+    // Salva il token nella blacklist
+    await db('blacklisted_tokens').insert({ token });
+
+    res.json({ message: 'Logout effettuato con successo' });
+  } catch (err) {
+    console.error('Errore nel logout:', err);
+    res.status(500).json({ message: 'Errore durante il logout' });
+  }
+}
+
 // Ottieni l'utente che fa l'accesso
 export async function getMe(req, res) {
   try {
