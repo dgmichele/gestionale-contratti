@@ -17,15 +17,15 @@ export function useAuth() {
       api.get('/me')
         .then(res => setUser(res.data))
         .catch((error) => {
-          if (error.name === 'TokenExpiredError') {
-          logout('La tua sessione è scaduta. Effettua di nuovo l’accesso.'); // logout chiama navigate('/login')
+          if (error.name === 'TokenExpiredError' || error.name === 'TokenBlacklistedError') {
+            logout('La tua sessione è scaduta o non è più valida. Effettua di nuovo l’accesso.');
           } else {
-          console.error('Errore imprevisto:', error);
+            console.error('Errore imprevisto:', error);
           }
         })
-        .finally(() => setLoading(false)); // fine caricamento
+        .finally(() => setLoading(false));
     } else {
-      setLoading(false); // nessun token trovato
+      setLoading(false);
     }
   }, []);
 
@@ -44,13 +44,26 @@ export function useAuth() {
     navigate('/');
   };
 
-  const logout = (message = null) => {
+const logout = async (message = null) => {
+  const token = localStorage.getItem('token');
+
+  try {
+    if (token) {
+    // invia richiesta di logout al server per blacklistare il token
+    await api.post('/logout');
+    }
+  } catch (error) {
+    console.warn('Errore nel logout sul server:', error.message);
+    // anche se fallisce il logout server-side, procediamo col logout locale
+  } finally {
+    // logout locale
     localStorage.removeItem('token');
     setUser(null);
     queryClient.clear();
     if (message) setLogoutMessage(message);
     navigate('/login');
-  };
+  }
+};
 
   return {
     user,

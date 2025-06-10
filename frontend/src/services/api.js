@@ -20,16 +20,26 @@ api.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
-// Intercetta errori 401 (token scaduto)
+// Intercetta errori 401 (token scaduto o nella blacklist)
 api.interceptors.response.use(
   response => response,
   error => {
     if (error.response?.status === 401) {
-      // Creiamo un errore specifico che potrà essere intercettato dal frontend
-      const customError = new Error('TOKEN_EXPIRED');
-      customError.name = 'TokenExpiredError';
-      return Promise.reject(customError);
+      const message = error.response.data?.error;
+
+      if (message === 'Token is blacklisted') {
+        const customError = new Error('TOKEN_BLACKLISTED');
+        customError.name = 'TokenBlacklistedError';
+        return Promise.reject(customError);
+      }
+
+      if (message === 'Token expired' || message === 'jwt expired') {
+        const customError = new Error('TOKEN_EXPIRED');
+        customError.name = 'TokenExpiredError';
+        return Promise.reject(customError);
+      }
     }
+
     return Promise.reject(error);
   }
 );

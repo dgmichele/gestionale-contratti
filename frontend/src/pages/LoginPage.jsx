@@ -58,7 +58,7 @@ export default function LoginPage() {
 
           {logoutMessage && (
             <div>
-              <p>{logoutMessage}</p>
+              <p style={{ color: "red" }}>{logoutMessage}</p>
             </div>
           )}
 
@@ -87,7 +87,7 @@ export default function LoginPage() {
           <p className={styles.auth}>
             {loading && (
               showServerStartMessage
-                ? "🕛 Il server si sta avviando, attendi circa 50 secondi..."
+                ? "Il server si sta avviando, attendi circa 50 secondi..."
                 : "Accesso in corso..."
             )}
           </p>
