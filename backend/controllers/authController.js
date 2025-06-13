@@ -64,7 +64,7 @@ export async function login(req, res) {
     // Genera Refresh Token (più lunga scadenza, per es. 7 giorni)
     const refreshToken = jwt.sign({ id: utente.id },
       process.env.JWT_SECRET_REFRESH,
-      { expiresIn:'7d' }
+      { expiresIn:'20s' }
     );
 
     // Salva il refresh_token nel db
