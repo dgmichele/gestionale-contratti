@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useContracts } from '../hooks/useContracts';
+import { useNavigate } from 'react-router-dom';
 import ContractCard from '../components/ContractCard';
 import PopupAddAndChangeContract from '../components/PopupAddAndChangeContract';
 import PopupDeleteContract from '../components/PopupDeleteContract';
@@ -38,9 +39,9 @@ export default function HomePage() {
   const [isDeletePopupVisible, setIsDeletePopupVisible] = useState(false);
   const [selectedContract, setSelectedContract] = useState(null);
   const [toast, setToast] = useState({
-    type: '',        // 'new' | 'edited' | 'deleted'
+    type: '', // 'new' | 'edited' | 'deleted'
     visible: false,
-    contractId: null // only used if type==='new'
+    contractId: null // usato solo se type==='new'
   });
   const [highlightedId, setHighlightedId] = useState(null);
   const [highlightedType, setHighlightedType] = useState(null);
@@ -105,6 +106,8 @@ export default function HomePage() {
     setIsDeletePopupVisible(false);
   };
 
+  const navigate = useNavigate();
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Bentornato, {user?.nome || 'utente'}!</h1>
@@ -120,7 +123,17 @@ export default function HomePage() {
       )}
 
       {isLoading && <p className={styles.status}>🔁 Caricamento contratti...</p>}
-      {error && <p className={styles.status}>❌ Errore nel caricamento dei contratti</p>}
+
+      {error?.response?.status === 401 || error?.response?.status === 403 ? (
+        <>
+          <p>⏳ La tua sessione è scaduta. Effettua nuovamente l'accesso per continuare.</p>
+          <button className={styles.newAccess} onClick={() => navigate('/login')}>
+            Accedi di nuovo
+          </button>
+        </>
+        ) : error ? (
+          <p>❌ Errore nel caricamento dei contratti.</p>
+        ) : null}
 
       {!isLoading && !error && (
         <>

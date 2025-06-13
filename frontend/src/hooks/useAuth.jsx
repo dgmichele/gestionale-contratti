@@ -8,67 +8,71 @@ export function useAuth() {
   const queryClient = useQueryClient();
 
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const [logoutMessage, setLogoutMessage] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      api.get('/me')
-        .then(res => setUser(res.data))
+      api
+        .get('/me')
+        .then((res) => setUser(res.data))
         .catch((error) => {
-          if (error.name === 'TokenExpiredError' || error.name === 'TokenBlacklistedError') {
-            logout('La tua sessione è scaduta o non è più valida. Effettua di nuovo l’accesso.');
-          } else {
-            console.error('Errore imprevisto:', error);
-          }
-        })
-        .finally(() => setLoading(false));
+          if (error?.response?.status === 401) {
+          // Token non valido, quindi effettuo il logout
+          logout('È scaduto il login, per favore autenticati di nuovo');
+        }
+      })
+        .finally(() => setLoading(false)); 
     } else {
       setLoading(false);
     }
   }, []);
 
   const register = async ({ nome, email, password }) => {
-  const response = await api.post('/register', { nome, email, password });
-  return response.data; // puoi restituire un messaggio oppure ignorarlo
+    const response = await api.post('/register', { nome, email, password });
+    return response.data;
   };
 
   const login = async ({ email, password }) => {
     const response = await api.post('/login', { email, password });
-    const { token } = response.data;
 
-    localStorage.setItem('token', token);
+    const { access_token, refresh_token } = response.data;
+
+    // Salva entrambi i token nel localStorage
+    localStorage.setItem('token', access_token);
+    localStorage.setItem('refresh_token', refresh_token);
+
+    // Dopo aver settato il token, possiamo ottenere l'utente
     const me = await api.get('/me');
     setUser(me.data);
     navigate('/');
   };
 
-const logout = async (message = null) => {
-  const token = localStorage.getItem('token');
+  const logout = async (message = null) => {
+    const token = localStorage.getItem('token');
 
-  try {
-    if (token) {
-    // invia richiesta di logout al server per blacklistare il token
-    await api.post('/logout');
+    try {
+      if (token) {
+        await api.post('/logout'); // blacklista il refresh_token
+      }
+    } catch (error) {
+      console.warn('Errore nel logout sul server!', error);
+    } finally {
+      localStorage.removeItem('token');
+      localStorage.removeItem('refresh_token'); // rimuovilo dal localStorage
+      setUser(null);
+      queryClient.clear();
+
+      if (message) setLogoutMessage(message);
+      navigate('/login');
     }
-  } catch (error) {
-    console.warn('Errore nel logout sul server:', error.message);
-    // anche se fallisce il logout server-side, procediamo col logout locale
-  } finally {
-    // logout locale
-    localStorage.removeItem('token');
-    setUser(null);
-    queryClient.clear();
-    if (message) setLogoutMessage(message);
-    navigate('/login');
-  }
-};
+  };
 
   return {
     user,
     isLoggedIn: !!user,
-    loading, // esporta loading
+    loading,
     login,
     logout,
     logoutMessage,

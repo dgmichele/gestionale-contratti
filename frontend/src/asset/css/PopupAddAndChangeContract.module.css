@@ -37,3 +37,16 @@
 .slideOut {
   transform: translateY(100px);
 }
+
+.newAccess{
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  text-decoration: underline !important;
+  color: #1e1e1e;
+  font-weight: 900;
+  font-size: 17px;
+  &:hover{
+    color:#b41c3c;
+  }
+}

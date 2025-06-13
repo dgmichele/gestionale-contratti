@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import AddContractForm from './AddContractForm';
 import { useContracts } from '../hooks/useContracts';
+import { Link } from 'react-router-dom';
 import styles from '../asset/css/PopupAddAndChangeContract.module.css';
 
 export default function PopupAddAndChangeContract({mode,initialData, onClose, onSuccess}) {
   const [visible, setVisible] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
-  const { addContract, updateContract } = useContracts();
+  const { addContract, updateContract, error } = useContracts();
 
   // Fa partire la transizione di apertura (fadeIn + slideIn)
   useEffect(() => {
@@ -22,32 +23,29 @@ export default function PopupAddAndChangeContract({mode,initialData, onClose, on
     }, 300);
   };
 
-  // _IMPORTANTE_: gestiamo il submit del form
-  const handleSubmit = async (formData) => {
-    try {
-      setErrorMsg('');
-      if (mode === 'edit') {
-        // Se sono in modifica, chiamo updateContract.mutateAsync
-        const updated = await updateContract.mutateAsync({
-          id: initialData.id,
-          ...formData
-        });
-        // AL SUCCESS: restituisco a Homepage l'id e il tipo "edited"
-        onSuccess(initialData.id, 'edited');
-      } else {
-        // Se sono in creazione, chiamo addContract.mutateAsync
-        const created = await addContract.mutateAsync(formData);
-        // Di solito il backend ritorna l'oggetto con { id: ..., nome: ..., ... }
-        // Quindi prendo created.id
-        onSuccess(created.id, 'new');
-      }
-      // Dopo aver chiamato onSuccess, chiudo il popup
-      handleClose();
-    } catch (err) {
-      console.error('Errore nel salvataggio contratto:', err);
+const handleSubmit = async (formData) => {
+  try {
+    setErrorMsg('');
+    if (mode === 'edit') {
+      await updateContract.mutateAsync({ id: initialData.id, ...formData });
+      onSuccess(initialData.id, 'edited');
+    } else {
+      const created = await addContract.mutateAsync(formData);
+      onSuccess(created.id, 'new');
+    }
+    handleClose();
+  } catch (err) {
+    console.error('Errore nel salvataggio contratto:', err);
+
+    // Controllo se l'errore indica sessione scaduta
+    if (err.response?.status === 401 || err.response?.status === 403) {
+      setErrorMsg('La tua sessione è scaduta. Effettua di nuovo l\'accesso cliccando qui in basso.');
+    } else {
       setErrorMsg('Errore durante il salvataggio. Riprova.');
     }
-  };
+  }
+};
+
 
   return (
     <div className={`${styles.overlay} ${visible ? styles.fadeIn : styles.fadeOut}`}>
@@ -58,11 +56,18 @@ export default function PopupAddAndChangeContract({mode,initialData, onClose, on
           onSubmit={handleSubmit}  // passo la nuova logica con onSuccess
           onCancel={handleClose}
         />
-        {errorMsg && (
-          <p style={{ color: 'red', marginTop: '10px' }}>
+      {errorMsg && (
+        <>
+          <p style={{ color: 'red', marginTop: '15px', textAlign: 'center' }}>
             {errorMsg}
           </p>
-        )}
+          {errorMsg.includes('sessione') && (
+            <Link className={styles.newAccess} to="/login">
+              Rifai l'accesso
+            </Link>
+          )}
+        </>
+      )}
       </div>
     </div>
   );

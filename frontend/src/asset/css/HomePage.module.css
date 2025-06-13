@@ -27,7 +27,7 @@
   padding: 10px 20px;
 }
 
-.addCardButton{
+.addCardButton, .newAccess{
   display: inline-block;
   margin-top: 20px;
   padding: 10px 20px;

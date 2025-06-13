@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useContracts } from '../hooks/useContracts';
+import { Link } from 'react-router-dom';
 import styles from '../asset/css/PopupDeleteContract.module.css';
 
 export default function PopupDeleteContract({ contrattoId, onClose, onSuccess }) {
@@ -28,7 +29,13 @@ export default function PopupDeleteContract({ contrattoId, onClose, onSuccess })
       handleClose();
     } catch (err) {
       console.error('Errore durante l\'eliminazione:', err);
-      setErrorMsg('Errore durante l’eliminazione. Riprova.');
+      
+      // Controllo se l'errore indica sessione scaduta
+      if (err.response?.status === 401 || err.response?.status === 403) {
+        setErrorMsg('La tua sessione è scaduta. Effettua di nuovo l\'accesso cliccando qui in basso.');
+      } else {
+        setErrorMsg('Errore durante il salvataggio. Riprova.');
+      }
     }
   };
 
@@ -48,7 +55,16 @@ export default function PopupDeleteContract({ contrattoId, onClose, onSuccess })
           </button>
         </div>
         {errorMsg && (
-          <p style={{ color: 'red', marginTop: '10px' }}>{errorMsg}</p>
+          <>
+            <p style={{ color: 'red', marginTop: '15px', textAlign: 'center' }}>
+              {errorMsg}
+            </p>
+            {errorMsg.includes('sessione') && (
+              <Link className={styles.newAccess} to="/login">
+                Rifai l'accesso
+              </Link>
+            )}
+          </>
         )}
       </div>
     </div>
