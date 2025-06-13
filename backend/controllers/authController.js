@@ -145,7 +145,7 @@ export async function refresh(req, res) {
     // Genera nuovo access_token
     const newAccess = jwt.sign({ id: decoded.id },
       process.env.JWT_SECRET,
-      { expiresIn:'10s' }
+      { expiresIn:'60s' }
     );
   
     res.json({ access_token: newAccess });
