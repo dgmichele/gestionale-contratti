@@ -58,13 +58,13 @@ export async function login(req, res) {
     // Genera Access Token (breve scadenza, 10s per test, 15m o altro in prod)
     const accessToken = jwt.sign({ id: utente.id, nome: utente.nome },
       process.env.JWT_SECRET,
-      { expiresIn: '10s' }
+      { expiresIn: '15m' }
     );
 
     // Genera Refresh Token (più lunga scadenza, per es. 7 giorni)
     const refreshToken = jwt.sign({ id: utente.id },
       process.env.JWT_SECRET_REFRESH,
-      { expiresIn:'10s' }
+      { expiresIn:'30d' }
     );
 
     // Salva il refresh_token nel db
@@ -145,7 +145,7 @@ export async function refresh(req, res) {
     // Genera nuovo access_token
     const newAccess = jwt.sign({ id: decoded.id },
       process.env.JWT_SECRET,
-      { expiresIn:'15s' }
+      { expiresIn:'15m' }
     );
   
     res.json({ access_token: newAccess });
