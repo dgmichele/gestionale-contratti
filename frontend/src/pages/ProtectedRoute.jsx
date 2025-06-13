@@ -16,7 +16,7 @@ export default function ProtectedRoute({ children }) {
       // Se il loading dura più di 5 secondi, mostra messaggio server
       timer = setTimeout(() => {
         setShowServerStartMessage(true);
-      }, 5000);
+      }, 3500);
     } else {
       // Reset se loading finisce
       setShowServerStartMessage(false);

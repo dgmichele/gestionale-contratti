@@ -5,7 +5,7 @@ import logo from '../asset/images/Logo.webp';
 import styles from '../asset/css/LoginPage.module.css';
 
 export default function LoginPage() {
-  const { login, isLoggedIn, logoutMessage } = useAuth();
+  const { login, isLoggedIn } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,7 +20,7 @@ export default function LoginPage() {
     if (loading) {
       timer = setTimeout(() => {
         setShowServerStartMessage(true);
-      }, 5000);
+      }, 3500);
     } else {
       setShowServerStartMessage(false);
     }
@@ -55,12 +55,6 @@ export default function LoginPage() {
           <img className={styles.logo} src={logo} alt="logo" />
           <h1>Accedi</h1>
           <p>Gestisci i tuoi contratti in un unico posto.</p>
-
-          {logoutMessage && (
-            <div>
-              <p style={{ color: "red" }}>{logoutMessage}</p>
-            </div>
-          )}
 
           <form onSubmit={handleSubmit}>
             <input

@@ -9,7 +9,6 @@ export function useAuth() {
 
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [logoutMessage, setLogoutMessage] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -20,7 +19,7 @@ export function useAuth() {
         .catch((error) => {
           if (error?.response?.status === 401) {
           // Token non valido, quindi effettuo il logout
-          logout('È scaduto il login, per favore autenticati di nuovo');
+          logout();
         }
       })
         .finally(() => setLoading(false)); 
@@ -63,8 +62,6 @@ export function useAuth() {
       localStorage.removeItem('refresh_token'); // rimuovilo dal localStorage
       setUser(null);
       queryClient.clear();
-
-      if (message) setLogoutMessage(message);
       navigate('/login');
     }
   };
@@ -75,7 +72,6 @@ export function useAuth() {
     loading,
     login,
     logout,
-    logoutMessage,
     register
   };
 }
