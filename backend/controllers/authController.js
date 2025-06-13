@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 export async function register(req, res) {
   try {
     // debug
-    console.log('Dati ricevuti dal client:', req.body);
+    // console.log('Dati ricevuti dal client:', req.body);
 
     const { nome, email, password } = req.body;
 
