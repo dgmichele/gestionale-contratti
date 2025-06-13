@@ -8,7 +8,7 @@ dotenv.config({
   path: process.env.NODE_ENV === 'production' ? '.env.production' : '.env.dev'
 });
 
-console.log('🔐 JWT_SECRET:', process.env.JWT_SECRET);
+// console.log('🔐 JWT_SECRET:', process.env.JWT_SECRET);
 
 const app = express();
 const PORT = process.env.PORT || 5000;

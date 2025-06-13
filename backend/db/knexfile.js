@@ -17,8 +17,8 @@ dotenv.config({
 });
 
 // debug psw
-console.log('[DEBUG] Password caricata:', process.env.DB_PASSWORD);
-console.log('[DEBUG] URL Supabase:', process.env.DATABASE_URL);
+// console.log('[DEBUG] Password caricata:', process.env.DB_PASSWORD);
+// console.log('[DEBUG] URL Supabase:', process.env.DATABASE_URL);
 
 const LOCAL_DB_CONFIG = {
   client: 'pg',
