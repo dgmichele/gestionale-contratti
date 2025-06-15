@@ -45,36 +45,36 @@ export async function login(req, res) {
     const { email, password } = req.body;
 
     // Cerca l'utente
-    const utente = await db('utenti').where({ email }).first();
+    const user = await db('utenti').where({ email }).first();
 
-    if (!utente) {
-      return res.status(400).json({ error: 'Email o password non validi' });
+    if (!user) {
+      return res.status(400).json({ message: 'Email o password non validi' });
     }
     // Verifica password
-    const passwordValida = await bcrypt.compare(password, utente.password_hash);
-    if (!passwordValida) {
-      return res.status(400).json({ error: 'Email o password non validi' });
+    const validPassword = await bcrypt.compare(password, user.password_hash);
+    if (!validPassword) {
+      return res.status(400).json({ message: 'Email o password non validi' });
     }
-    // Genera Access Token (breve scadenza, 10s per test, 15m o altro in prod)
-    const accessToken = jwt.sign({ id: utente.id, nome: utente.nome },
+    // Genera Access Token 
+    const accessToken = jwt.sign({ id: user.id, nome: user.nome },
       process.env.JWT_SECRET,
       { expiresIn: '15m' }
     );
 
-    // Genera Refresh Token (più lunga scadenza, per es. 7 giorni)
-    const refreshToken = jwt.sign({ id: utente.id },
+    // Genera Refresh Token 
+    const refreshToken = jwt.sign({ id: user.id },
       process.env.JWT_SECRET_REFRESH,
       { expiresIn:'30d' }
     );
 
     // Salva il refresh_token nel db
-    await db('refresh_tokens').insert({ token: refreshToken, utente_id: utente.id });
+    await db('refresh_tokens').insert({ token: refreshToken, utente_id: user.id });
 
     res.json({ message:'Login riuscito!', access_token:accessToken, refresh_token:refreshToken });
 
   } catch (error) {
     console.error('Errore nel login!', error);
-    res.status(500).json({ error:'Errore interno nel login' });
+    res.status(500).json({ message:'Errore interno nel login' });
   }
 }
 
