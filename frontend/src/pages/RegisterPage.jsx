@@ -14,14 +14,14 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [showServerStartMessage, setShowServerStartMessage] = useState(false);  // gestione server dormiente Render
 
-  // useEffect per attivare il messaggio dopo 5 secondi di loading
+  // useEffect per attivare il messaggio dopo 3.5 secondi di loading
   useEffect(() => {
     let timer;
 
     if (loading) {
       timer = setTimeout(() => {
         setShowServerStartMessage(true);
-      }, 5000);
+      }, 3500);
     } else {
       setShowServerStartMessage(false);
     }
@@ -39,8 +39,7 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      console.log("📦 Dati inviati:", { nome, email, password });
-
+      // console.log("📦 Dati inviati:", { nome, email, password });
       await register({ nome, email, password });
       await login({ email, password }); // login automatico
 

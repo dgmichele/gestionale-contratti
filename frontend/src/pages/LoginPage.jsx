@@ -13,7 +13,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [showServerStartMessage, setShowServerStartMessage] = useState(false); // gestione server dormiente Render
 
-  // useEffect per attivare il messaggio dopo 5 secondi di loading
+  // useEffect per attivare il messaggio dopo 3.5 secondi di loading
   useEffect(() => {
     let timer;
 
@@ -39,10 +39,10 @@ export default function LoginPage() {
 
     try {
       await login({ email, password });
-      console.log("✅ Login riuscito!");
+      // console.log("✅ Login riuscito!");
     } catch (err) {
       console.error("❌ Errore login:", err);
-      setError("Credenziali non valide.");
+      setError(err.response?.data?.message || "Errore durante il login.");
     } finally {
       setLoading(false);
     }

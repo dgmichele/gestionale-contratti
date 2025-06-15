@@ -13,7 +13,7 @@ export default function ProtectedRoute({ children }) {
     let timer;
 
     if (loading) {
-      // Se il loading dura più di 5 secondi, mostra messaggio server
+      // Se il loading dura più di 3,5 secondi, mostra messaggio server
       timer = setTimeout(() => {
         setShowServerStartMessage(true);
       }, 3500);
@@ -28,7 +28,7 @@ export default function ProtectedRoute({ children }) {
 
   if (loading) {
     if (showServerStartMessage) {
-      return <p className={styles.status}>🕛 Attendi 50 secondi, sto avviando il server...</p>;
+      return <p className={styles.status}>Attendi 50 secondi, sto avviando il server...</p>;
     }
     return <p className={styles.status}>🔁 Recupero i dati...</p>;
   }
