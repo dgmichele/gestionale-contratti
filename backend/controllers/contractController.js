@@ -1,7 +1,7 @@
 import db from '../db.js';
 
 // GET tutti i contratti dell’utente loggato
-export async function getContratti(req, res) {
+export async function getContracts(req, res) {
   const userId = req.user.id;
 
   // Paginazione risultati
@@ -10,20 +10,20 @@ export async function getContratti(req, res) {
   const offset = (page - 1) * limit; // calcolo offset
 
   try {
-    const contratto = await db('contratti')
+    const contract = await db('contratti')
       .where({ utente_id: userId })
       .orderBy('created_at', 'desc')
       .limit(limit)
       .offset(offset);
 
-    res.json(contratto);
+    res.json(contract);
   } catch (err) {
     res.status(500).json({ message: 'Errore nel recupero dei contratti' });
   }
 }
 
 // POST - Crea un nuovo contratto
-export async function createContratto(req, res) {
+export async function createContract(req, res) {
   const userId = req.user.id;
   const { nome, cognome, data_scadenza } = req.body;
 
@@ -32,7 +32,7 @@ export async function createContratto(req, res) {
   }
 
   try {
-    const [nuovoContratto] = await db('contratti')
+    const [newContract] = await db('contratti')
       .insert({
         utente_id: userId,
         nome,
@@ -41,45 +41,45 @@ export async function createContratto(req, res) {
       })
       .returning('*'); // restituisce il contratto creato (PostgreSQL)
 
-    res.status(201).json(nuovoContratto);
+    res.status(201).json(newContract);
   } catch (err) {
     res.status(500).json({ message: 'Errore nella creazione del contratto' });
   }
 }
 
 // PUT - Modifica un contratto esistente
-export async function updateContratto(req, res) {
+export async function updateContract(req, res) {
   const userId = req.user.id;
   const { id } = req.params;
   const { nome, cognome, data_scadenza } = req.body;
 
   try {
-    const contratto = await db('contratti').where({ id, utente_id: userId }).first();
+    const contract = await db('contratti').where({ id, utente_id: userId }).first();
 
-    if (!contratto) {
+    if (!contract) {
       return res.status(404).json({ message: 'Contratto non trovato' });
     }
 
-    const [contrattoAggiornato] = await db('contratti')
+    const [updatedContract] = await db('contratti')
       .where({ id })
       .update({ nome, cognome, data_scadenza, updated_at: new Date() })
       .returning('*');
 
-    res.json(contrattoAggiornato);
+    res.json(updatedContract);
   } catch (err) {
     res.status(500).json({ message: 'Errore nell\'aggiornamento del contratto' });
   }
 }
 
 // DELETE - Elimina un contratto
-export async function deleteContratto(req, res) {
+export async function deleteContract(req, res) {
   const userId = req.user.id;
   const { id } = req.params;
 
   try {
-    const contratto = await db('contratti').where({ id, utente_id: userId }).first();
+    const contract = await db('contratti').where({ id, utente_id: userId }).first();
 
-    if (!contratto) {
+    if (!contract) {
       return res.status(404).json({ message: 'Contratto non trovato' });
     }
 
