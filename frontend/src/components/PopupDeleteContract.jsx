@@ -3,7 +3,7 @@ import { useContracts } from '../hooks/useContracts';
 import { Link } from 'react-router-dom';
 import styles from '../asset/css/PopupDeleteContract.module.css';
 
-export default function PopupDeleteContract({ contrattoId, onClose, onSuccess }) {
+export default function PopupDeleteContract({ contractId, onClose, onSuccess }) {
   const [visible, setVisible] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const { deleteContract } = useContracts();
@@ -23,9 +23,9 @@ export default function PopupDeleteContract({ contrattoId, onClose, onSuccess })
   const handleConfirm = async () => {
     try {
       setErrorMsg('');
-      await deleteContract.mutateAsync(contrattoId);
+      await deleteContract.mutateAsync(contractId);
       // Dopo la cancellazione, avviso Homepage di mostrare toast “deleted”
-      onSuccess(contrattoId); 
+      onSuccess(contractId); 
       handleClose();
     } catch (err) {
       console.error('Errore durante l\'eliminazione:', err);

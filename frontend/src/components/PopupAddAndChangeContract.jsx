@@ -4,10 +4,10 @@ import { useContracts } from '../hooks/useContracts';
 import { Link } from 'react-router-dom';
 import styles from '../asset/css/PopupAddAndChangeContract.module.css';
 
-export default function PopupAddAndChangeContract({mode,initialData, onClose, onSuccess}) {
+export default function PopupAddAndChangeContract({mode, initialData, onClose, onSuccess}) {
   const [visible, setVisible] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
-  const { addContract, updateContract, error } = useContracts();
+  const { addContract, updateContract } = useContracts();
 
   // Fa partire la transizione di apertura (fadeIn + slideIn)
   useEffect(() => {

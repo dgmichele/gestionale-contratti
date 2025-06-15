@@ -17,7 +17,7 @@ export default function Toast({ type, visible, contractId, onClose }) {
   // Funzione che scrolla alla card del contratto, se passiamo un contractId valido
   const handleScrollToContract = () => {
     if (!contractId) return;
-    // Costruiamo l'id HTML uguale a quello che metteremo in ContractCard:
+    // Recuperiamo l'id della nuova contract card
     const element = document.getElementById(`contract-${contractId}`);
     if (element) {
       // Scroll fino all’elemento, con un piccolo offset se serve
@@ -27,8 +27,7 @@ export default function Toast({ type, visible, contractId, onClose }) {
     onClose();
   };
 
-  if (!visible) return null;
-  // Se non vogliamo mostrare il toast, ritorniamo null e React non renderizza nulla
+  if (!visible) return null; // Se non vogliamo mostrare il toast, ritorniamo null e React non renderizza nulla
 
   // Decidiamo il contenuto del toast in base al tipo
   let message = '';

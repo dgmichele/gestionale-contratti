@@ -26,12 +26,12 @@ export function useContracts(limit) {
   });
 
   // Trasformiamo i contratti da tutte le pagine in un unico array piatto
-  const contratti = data ? data.pages.flat() : [];
+  const contracts = data ? data.pages.flat() : [];
 
   // POST - Aggiungi contratto
   const addContract = useMutation({
-    mutationFn: async (nuovoContratto) => {
-      const res = await api.post('/contratti', nuovoContratto);
+    mutationFn: async (newContract) => {
+      const res = await api.post('/contratti', newContract);
       return res.data;
     },
     onSuccess: () => {
@@ -41,8 +41,8 @@ export function useContracts(limit) {
 
   // PUT - Modifica contratto
   const updateContract = useMutation({
-    mutationFn: async ({ id, ...dati }) => {
-      const res = await api.put(`/contratti/${id}`, dati);
+    mutationFn: async ({ id, ...data }) => {
+      const res = await api.put(`/contratti/${id}`, data);
       return res.data;
     },
     onSuccess: () => {
@@ -62,7 +62,7 @@ export function useContracts(limit) {
   });
 
   return {
-    contratti,
+    contracts,
     isLoading,
     error,
     addContract,

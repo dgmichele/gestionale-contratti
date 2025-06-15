@@ -23,7 +23,7 @@ export default function HomePage() {
 
   // Hook per contratti
   const {
-    contratti,
+    contracts,
     isLoading,
     error,
     fetchNextPage,
@@ -31,7 +31,7 @@ export default function HomePage() {
     isFetchingNextPage
   } = useContracts(limit);
 
-  const visibleContracts = contratti;
+  const visibleContracts = contracts;
 
   // Stati per popup
   const [popupMode, setPopupMode] = useState('add');
@@ -110,7 +110,7 @@ export default function HomePage() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Bentornato, {user?.nome || 'utente'}!</h1>
+      <h1 className={styles.title}>Ciao {user?.nome || 'utente'}!</h1>
 
       {/* mostro il toast se toast.visible===true */}
       {toast.visible && (
@@ -150,14 +150,14 @@ export default function HomePage() {
             </>
           ) : (
             <div className={styles.grid}>
-              {visibleContracts.map((contratto) => (
+              {visibleContracts.map((contract) => (
                 <ContractCard
-                  key={contratto.id}
-                  contratto={contratto}
+                  key={contract.id}
+                  contract={contract}
                   onEdit={openChangePopup}
                   onDelete={openDeletePopup}
                   // Se questo contratto corrisponde a highlightedId, passo highlightedType
-                  highlightType={highlightedId === contratto.id ? highlightedType : undefined}
+                  highlightType={highlightedId === contract.id ? highlightedType : undefined}
                 />
               ))}
               <button className={styles.addCardPlus} onClick={openAddPopup}>
@@ -191,7 +191,7 @@ export default function HomePage() {
 
       {isDeletePopupVisible && (
         <PopupDeleteContract
-          contrattoId={selectedContract?.id}
+          contractId={selectedContract?.id}
           onClose={closeDeletePopup}
           onSuccess={handleDeleteSuccess}
         />
