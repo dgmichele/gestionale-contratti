@@ -110,7 +110,7 @@ export default function HomePage() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Ciao {user?.nome || 'utente'}!</h1>
+      <h1 className={styles.title}>Ciao {user?.nome || 'utente'}! 😊</h1>
 
       {/* mostro il toast se toast.visible===true */}
       {toast.visible && (
@@ -171,10 +171,15 @@ export default function HomePage() {
               <button
                 className={styles.loadMoreBtn}
                 onClick={fetchNextPage}
-                disabled={isFetchingNextPage}
-              >
+                disabled={isFetchingNextPage}>
                 {isFetchingNextPage ? 'Caricamento...' : 'Carica altri contratti'}
               </button>
+            )}
+
+            {!hasNextPage && visibleContracts.length > 0 && (
+              <p className={styles.noMore}>
+                Lista contratti completa ✅
+              </p>
             )}
           </div>
         </>
