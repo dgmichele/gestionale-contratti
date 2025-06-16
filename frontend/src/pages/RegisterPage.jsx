@@ -13,20 +13,32 @@ export default function RegisterPage() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showServerStartMessage, setShowServerStartMessage] = useState(false);  // gestione server dormiente Render
+  const [timeoutMessage, setTimeoutMessage] = useState(false); // gestione server irraggiungibile
 
-  // useEffect per attivare il messaggio dopo 3.5 secondi di loading
+  // Gestiamo i tempi di attesa per il messaggio di server in avvio e irraggiungibile
   useEffect(() => {
-    let timer;
+    let startTimeout;
+    let unreachableTimeout;
 
     if (loading) {
-      timer = setTimeout(() => {
+      // Dopo 3.5sec mostriamo il messaggio di "server in avvio"
+      startTimeout = setTimeout(() => {
         setShowServerStartMessage(true);
       }, 3500);
+
+      // Dopo 90sec consideriamo il server non raggiungibile
+      unreachableTimeout = setTimeout(() => {
+        setTimeoutMessage(true);
+      }, 90000);
     } else {
       setShowServerStartMessage(false);
+      setTimeoutMessage(false);
     }
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(startTimeout);
+      clearTimeout(unreachableTimeout);
+    };
   }, [loading]);
 
   if (isLoggedIn) {
@@ -93,10 +105,14 @@ export default function RegisterPage() {
           </form>
 
           <p className={styles.auth}>
-            {loading && (
+            {loading && !timeoutMessage && (
               showServerStartMessage
-                ? "🕛 Il server si sta avviando, attendi circa 50 secondi..."
-                : "Registrazione in corso..."
+                ? "Il server si sta avviando, attendi circa 50 secondi..."
+                : "Accesso in corso..."
+            )}
+
+            {loading && timeoutMessage && (
+              "È passato troppo tempo... sembra che il server non stia rispondendo. Riprova più tardi."
             )}
           </p>
 
