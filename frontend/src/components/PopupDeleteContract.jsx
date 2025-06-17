@@ -34,7 +34,7 @@ export default function PopupDeleteContract({ contractId, onClose, onSuccess }) 
       if (err.response?.status === 401 || err.response?.status === 403) {
         setErrorMsg('La tua sessione è scaduta. Effettua di nuovo l\'accesso cliccando qui in basso.');
       } else {
-        setErrorMsg('Errore durante il salvataggio. Riprova.');
+        setErrorMsg('Errore durante l\'eliminazione. Riprova.');
       }
     }
   };

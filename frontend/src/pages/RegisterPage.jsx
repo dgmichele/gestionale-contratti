@@ -37,7 +37,7 @@ export default function RegisterPage() {
       handleAuthSuccess();
     } catch (err) {
       console.error("❌ Errore registrazione:", err);
-      const errorMessage = err.response?.data?.message || "Errore durante la registrazione";
+      const errorMessage = err.response?.data?.message || "Errore durante la registrazione."
       handleAuthError(errorMessage);
     }
   };
