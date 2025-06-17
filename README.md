@@ -97,7 +97,7 @@ Crea un file `.env.dev`:
 
     VITE_API_BASE_URL=il_tuo_link_Render
 
-Inserisci l'url del server fornito da Render (o il tool che scegli) per sviluppare in produzione, in alternativa inserisci http://localhost:5000 per sviluppare in locale. È fondamentale che includi questa variabile nella sezione dedicata alle variabili d'ambiente del tool dove deployerai il client, come Netlify.
+Inserisci l'url del server fornito da Render (o il tool che scegli) per sviluppare in produzione, in alternativa inserisci http://localhost:5000 per sviluppare in locale. È fondamentale che includi questa variabile (quella di produzione, quindi del link Render per esempio) nella sezione dedicata alle variabili d'ambiente del tool dove deployerai il client, come Netlify.
 
 ### 3. Migrazioni
 
