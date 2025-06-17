@@ -10,29 +10,37 @@ export function useAuth() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Effettua il fetch dell'utente al caricamento del componente
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      api
-        .get('/me')
-        .then((res) => setUser(res.data))
-        .catch((error) => {
+    const fetchUser = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const res = await api.get('/me');
+          setUser(res.data);
+        } catch (error) {
           if (error?.response?.status === 401) {
-          // Token non valido, quindi effettuo il logout
-          logout();
+            // Token non valido, quindi effettuo il logout
+            logout();
+          }
+        } finally {
+          setLoading(false);
         }
-      })
-        .finally(() => setLoading(false)); 
-    } else {
-      setLoading(false);
-    }
+      } else {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
   }, []);
 
+  // registra un nuovo utente
   const register = async ({ nome, email, password }) => {
     const response = await api.post('/register', { nome, email, password });
     return response.data;
   };
 
+  // Effettua il login dell'utente
   const login = async ({ email, password }) => {
     const response = await api.post('/login', { email, password });
 
@@ -48,7 +56,8 @@ export function useAuth() {
     navigate('/');
   };
 
-  const logout = async (message = null) => {
+  // Effettua il logout dell'utente
+  const logout = async () => {
     const token = localStorage.getItem('token');
 
     try {
@@ -65,7 +74,7 @@ export function useAuth() {
       navigate('/login');
     }
   };
-
+  
   return {
     user,
     isLoggedIn: !!user,
