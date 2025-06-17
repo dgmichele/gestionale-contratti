@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useContracts } from '../hooks/useContracts';
+import { useUI } from '../hooks/useUI';
 import { useNavigate } from 'react-router-dom';
 import ContractCard from '../components/ContractCard';
 import PopupAddAndChangeContract from '../components/PopupAddAndChangeContract';
@@ -10,8 +11,9 @@ import styles from '../asset/css/HomePage.module.css';
 
 export default function HomePage() {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
-  // Rilevo se siamo in mobile (per paginazione): la parte rimane uguale a prima
+  // Rilevo se siamo in mobile (per paginazione)
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -33,92 +35,43 @@ export default function HomePage() {
 
   const visibleContracts = contracts;
 
-  // Stati per popup
-  const [popupMode, setPopupMode] = useState('add');
-  const [isAddAndChangePopupVisible, setIsAddAndChangePopupVisible] = useState(false);
-  const [isDeletePopupVisible, setIsDeletePopupVisible] = useState(false);
-  const [selectedContract, setSelectedContract] = useState(null);
-  const [toast, setToast] = useState({
-    type: '', // 'new' | 'edited' | 'deleted'
-    visible: false,
-    contractId: null // usato solo se type==='new'
-  });
-  const [highlightedId, setHighlightedId] = useState(null);
-  const [highlightedType, setHighlightedType] = useState(null);
-
-  // Successo in ADD o EDIT
-  const handleAddOrEditSuccess = (newId, actionType) => {
-    // Imposto badge
-    setHighlightedId(newId);
-    setHighlightedType(actionType);
-
-    // Mostro toast
-    setToast({
-      type: actionType,
-      visible: true,
-      contractId: actionType === 'new' ? newId : null
-    });
-  };
-
-  // Successo in DELETE
-  const handleDeleteSuccess = (deletedId) => {
-    // Rimuovo eventuale evidenza
-    if (highlightedId === deletedId) {
-      setHighlightedId(null);
-      setHighlightedType(null);
-    }
-    // Mostro toast di tipo 'deleted'
-    setToast({
-      type: 'deleted',
-      visible: true,
-      contractId: null
-    });
-  };
-
-  // Chiudo il toast (sia manualmente che dopo 3 secondi)
-  const handleToastClose = () => {
-    // Nascondo il toast
-    setToast(current => ({ ...current, visible: false }));
-  };
-
-  const openAddPopup = () => {
-    setPopupMode('add');
-    setSelectedContract(null);
-    setIsAddAndChangePopupVisible(true);
-  };
-
-  const openChangePopup = (contratto) => {
-    setPopupMode('edit');
-    setSelectedContract(contratto);
-    setIsAddAndChangePopupVisible(true);
-  };
-
-  const closeAddAndChangePopup = () => {
-    setIsAddAndChangePopupVisible(false);
-  };
-
-  const openDeletePopup = (contratto) => {
-    setSelectedContract(contratto);
-    setIsDeletePopupVisible(true);
-  };
-
-  const closeDeletePopup = () => {
-    setIsDeletePopupVisible(false);
-  };
-
-  const navigate = useNavigate();
+  // Hook per gestire tutta la logica UI (popup, toast, evidenziazioni)
+  const {
+    // Stati
+    popupMode,
+    isAddAndChangePopupVisible,
+    isDeletePopupVisible,
+    selectedContract,
+    toast,
+    highlightedId,
+    highlightedType,
+    
+    // Metodi per popup
+    openAddPopup,
+    openChangePopup,
+    openDeletePopup,
+    closeAddAndChangePopup,
+    closeDeletePopup,
+    
+    // Metodi per toast
+    hideToast,
+    
+    // Metodi combinati
+    handleAddOrEditSuccess,
+    handleDeleteSuccess
+  } = useUI();
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Ciao {user?.nome || 'utente'}! 😊</h1>
 
-      {/* mostro il toast se toast.visible===true */}
+      {/* Mostro il toast se toast.visible===true */}
       {toast.visible && (
         <Toast
           type={toast.type}
           visible={toast.visible}
           contractId={toast.contractId}
-          onClose={handleToastClose}
+          onClose={hideToast}
         />
       )}
 

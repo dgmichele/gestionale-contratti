@@ -1,45 +1,26 @@
-import { useState, useEffect } from "react";
 import { Navigate, Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import { useAuthUI } from "../hooks/useAuthUI";
 import logo from '../asset/images/Logo.webp';
 import styles from '../asset/css/RegisterPage.module.css';
 
 export default function RegisterPage() {
   const { login, isLoggedIn, register } = useAuth(); 
-
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [showServerStartMessage, setShowServerStartMessage] = useState(false);  // gestione server dormiente Render
-  const [timeoutMessage, setTimeoutMessage] = useState(false); // gestione server irraggiungibile
-
-  // Gestiamo i tempi di attesa per il messaggio di server in avvio e irraggiungibile
-  useEffect(() => {
-    let startTimeout;
-    let unreachableTimeout;
-
-    if (loading) {
-      // Dopo 3.5sec mostriamo il messaggio di "server in avvio"
-      startTimeout = setTimeout(() => {
-        setShowServerStartMessage(true);
-      }, 3500);
-
-      // Dopo 90sec consideriamo il server non raggiungibile
-      unreachableTimeout = setTimeout(() => {
-        setTimeoutMessage(true);
-      }, 90000);
-    } else {
-      setShowServerStartMessage(false);
-      setTimeoutMessage(false);
-    }
-
-    return () => {
-      clearTimeout(startTimeout);
-      clearTimeout(unreachableTimeout);
-    };
-  }, [loading]);
+  const {
+    nome,
+    email,
+    password,
+    error,
+    loading,
+    timeoutMessage,
+    setNome,
+    setEmail,
+    setPassword,
+    startAuth,
+    handleAuthSuccess,
+    handleAuthError,
+    getStatusMessage
+  } = useAuthUI();
 
   if (isLoggedIn) {
     return <Navigate to="/" replace />;
@@ -47,19 +28,17 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
-    setLoading(true);
+    startAuth();
 
     try {
       // console.log("📦 Dati inviati:", { nome, email, password });
       await register({ nome, email, password });
       await login({ email, password }); // login automatico
-
+      handleAuthSuccess();
     } catch (err) {
       console.error("❌ Errore registrazione:", err);
-      setError(err.response?.data?.message || "Errore durante la registrazione");
-    } finally {
-      setLoading(false);
+      const errorMessage = err.response?.data?.message || "Errore durante la registrazione";
+      handleAuthError(errorMessage);
     }
   };
 
@@ -105,15 +84,8 @@ export default function RegisterPage() {
           </form>
 
           <p className={styles.auth}>
-            {loading && !timeoutMessage && (
-              showServerStartMessage
-                ? "Il server si sta avviando, attendi circa 50 secondi..."
-                : "Accesso in corso..."
-            )}
-
-            {loading && timeoutMessage && (
-              "È passato troppo tempo... sembra che il server non stia rispondendo. Riprova più tardi."
-            )}
+            {loading && !timeoutMessage && getStatusMessage('register')}
+            {loading && timeoutMessage && getStatusMessage('register')}
           </p>
 
           {error && <p style={{ color: "red" }}>{error}</p>}
