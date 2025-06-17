@@ -103,8 +103,7 @@ Inserisci l'url del server fornito da Render (o il tool che scegli) per sviluppa
 
 - È importante fare le migrazioni per settare le tabelle, quindi fai così:
 
-  npx cross-env NODE_ENV=development knex migrate:latest --knexfile db/knexfile.js (modalità sviluppo)
-  npx cross-env NODE_ENV=development knex migrate:latest --knexfile db/knexfile.js (modalità produzione)
+  `npx knex migrate:latest --knexfile db/knexfile.js`
 
 ## 💻 Testa il progetto
 
