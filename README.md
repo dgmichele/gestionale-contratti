@@ -53,9 +53,9 @@ Si tratta di un **gestionale per contratti di affitto**, dove ogni utente può:
 
 ### 1. Clona la repository:
 
-git clone <url-tuo-repo>
+`git clone <url-tuo-repo>`
 
-cd gestionale-contratti
+`cd gestionale-contratti`
 
 ### 2. Configura le variabili d'ambiente:
 
@@ -64,7 +64,9 @@ cd gestionale-contratti
 - Dovrai creare un file .env di sviluppo `.env.dev`:
 
   NODE_ENV=development
+
   DB_HOST=localhost
+
   DB_PORT=5432
   DB_NAME=gestionale-contratti
   DB_USER=postgres
