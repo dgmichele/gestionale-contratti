@@ -90,7 +90,7 @@
   border-radius: 0.5rem;
   cursor: pointer;
   transition: background 0.3s;
-
+  min-height: 150px;
   &:hover{
       background-color: #f0d6da;
   }
@@ -98,3 +98,5 @@
       background-color: #f0d6da;
   }
 }
+
+

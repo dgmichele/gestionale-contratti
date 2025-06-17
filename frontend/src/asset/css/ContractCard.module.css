@@ -35,6 +35,15 @@
   font-weight: 600;
 }
 
+.isExpiredToday{
+  color: #ffa600;
+  font-weight: 600;
+}
+
+.isAlmostExpired{
+  font-weight: 600;
+}
+
 .badgeNew, .badgeEdited  {
   color: #fffbfc;
   font-size: 12px;

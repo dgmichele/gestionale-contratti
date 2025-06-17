@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import styles from '../asset/css/Header.module.css';
-import { FiUser } from 'react-icons/fi';
+import { FaUserCircle } from "react-icons/fa";
 import logo from '../asset/images/Logo.webp'
 
 export default function Header() {
@@ -28,25 +28,26 @@ export default function Header() {
 
   return (
     <header className={styles.header}>
-      <Link to="/"><img className={styles.logo} src={logo} alt="logo" /></Link>
+      <div className={styles.headerContainer}>
+        <Link to="/"><img className={styles.logo} src={logo} alt="logo" /></Link>
+        {/* Wrapper per icona + menu */}
+        <div ref={menuRef} className={styles.userIconWrapper}>
+          <FaUserCircle
+            className={styles.userIcon}
+            onClick={() => setMenuVisible((prev) => !prev)}
+          />
 
-      {/* Wrapper per icona + menu */}
-      <div ref={menuRef} className={styles.userIconWrapper}>
-        <FiUser
-          className={styles.userIcon}
-          onClick={() => setMenuVisible((prev) => !prev)}
-        />
-
-        <div
-          className={`${styles.userMenu} ${
-            menuVisible ? styles.show : styles.hide
-          }`}
-        >
-          <p className={styles.userName}>{user?.nome}</p>
-          <p className={styles.userEmail}>{user?.email}</p>
-          <button className={styles.logoutButton} onClick={logout}>
-            Logout
-          </button>
+          <div
+            className={`${styles.userMenu} ${
+              menuVisible ? styles.show : styles.hide
+            }`}
+          >
+            <p className={styles.userName}>{user?.nome}</p>
+            <p className={styles.userEmail}>{user?.email}</p>
+            <button className={styles.logoutButton} onClick={logout}>
+              Logout
+            </button>
+          </div>
         </div>
       </div>
     </header>
