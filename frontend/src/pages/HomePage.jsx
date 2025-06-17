@@ -21,7 +21,10 @@ export default function HomePage() {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-  const limit = isMobile ? 6 : 11;
+
+  const limit = isMobile ? 6 : 11; // 6 per mobile, 11 per desktop
+
+  const [hasLoadedMore, setHasLoadedMore] = useState(false);
 
   // Hook per contratti
   const {
@@ -32,6 +35,12 @@ export default function HomePage() {
     hasNextPage,
     isFetchingNextPage
   } = useContracts(limit);
+
+  // Mostro "Lista contratti completa ✅" solo se sono stati caricati più di 11 (o 6) contratti
+  const handleLoadMore = () => {
+    fetchNextPage();
+    setHasLoadedMore(true);
+  };
 
   const visibleContracts = contracts;
 
@@ -123,17 +132,17 @@ export default function HomePage() {
             {hasNextPage && (
               <button
                 className={styles.loadMoreBtn}
-                onClick={fetchNextPage}
+                onClick={handleLoadMore}
                 disabled={isFetchingNextPage}>
                 {isFetchingNextPage ? 'Caricamento...' : 'Carica altri contratti'}
               </button>
             )}
 
-            {!hasNextPage && visibleContracts.length > 0 && (
-              <p className={styles.noMore}>
-                Lista contratti completa ✅
-              </p>
-            )}
+          {!hasNextPage && hasLoadedMore && visibleContracts.length >= limit && (
+            <p className={styles.noMore}>
+              Lista contratti completa ✅
+            </p>
+          )}
           </div>
         </>
       )}
