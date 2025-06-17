@@ -68,17 +68,25 @@ Si tratta di un **gestionale per contratti di affitto**, dove ogni utente può:
   DB_HOST=localhost
 
   DB_PORT=5432
+
   DB_NAME=gestionale-contratti
+
   DB_USER=postgres
+
   DB_PASSWORD=tuapassword
+
   JWT_SECRET=tuo_segreto
+
   JWT_SECRET_REFRESH=tuo_segreto
 
 - e produzione `.env.production` (per collegarti al DB online come Supabase):
 
   NODE_ENV=production
+
   DATABASE_URL=il_tuo_link_supabase
+
   JWT_SECRET=tuo_segreto
+
   JWT_SECRET_REFRESH=tuo_segreto
 
 È importante che imposti le variabili di produzione nella sezione dedicata all'interno del server online che sceglierai, come Render. In questo modo Render si collega a Supabase e permette di rendere il DB raggiungibile dal client.
