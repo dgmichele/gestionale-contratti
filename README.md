@@ -54,6 +54,7 @@ Si tratta di un **gestionale per contratti di affitto**, dove ogni utente può:
 ### 1. Clona la repository:
 
 git clone <url-tuo-repo>
+
 cd gestionale-contratti
 
 ### 2. Configura le variabili d'ambiente:
