@@ -47,7 +47,7 @@ L'app funziona grazie ad **un'API backend con Express + Postgres (Knex)** e **un
 - Axios
 - Vite
 
-**Deploy**
+**Deploy:**
 
 - Server: Render (free)
 - Database: Supabase (free)
