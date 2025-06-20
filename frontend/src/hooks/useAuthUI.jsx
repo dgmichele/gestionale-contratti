@@ -174,9 +174,7 @@ export const useAuthUI = (externalLoading = null) => {
     }
     
     if (state.showServerStartMessage) {
-      return mode === 'protected' 
-        ? "Attendi 50 secondi, sto avviando il server..."
-        : "Il server si sta avviando, attendi circa 50 secondi...";
+      return "Il server si sta avviando, attendi circa 50 secondi...";
     }
     
     // Messaggi di default per lo stato di loading
