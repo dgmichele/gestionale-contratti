@@ -6,7 +6,7 @@ function ContractCard({ contract, onEdit, onDelete, highlightType }) { // highli
 
   const isExpired = new Date(contract.data_scadenza) < new Date() && new Date(contract.data_scadenza).getDate() !== new Date().getDate();
   const isExpiredToday = new Date(contract.data_scadenza).getDate() === new Date().getDate();
-  const isAlmostExpired = new Date(contract.data_scadenza) < new Date(new Date().setDate(new Date().getDate() + 3)) && new Date(contract.data_scadenza).getDate() !== new Date().getDate();
+  const isAlmostExpired = new Date(contract.data_scadenza) < new Date(new Date().setDate(new Date().getDate() + 7)) && new Date(contract.data_scadenza).getDate() !== new Date().getDate();
 
   const formattedData = (dataISO) => {
     const data = new Date(dataISO);
@@ -36,7 +36,7 @@ function ContractCard({ contract, onEdit, onDelete, highlightType }) { // highli
       ) : isExpiredToday ? (
         <p className={styles.isExpiredToday}>⚠️ Scade oggi!</p>
       ) : isAlmostExpired ? (
-        <p className={styles.isAlmostExpired}>ℹ️ Mancano solo 3 giorni!</p>
+        <p className={styles.isAlmostExpired}>ℹ️ Scade a breve!</p>
       ) : null}
 
       <div className={styles.actions}>
