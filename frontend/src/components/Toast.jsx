@@ -5,10 +5,10 @@ export default function Toast({ type, visible, contractId, onClose }) {
 
   useEffect(() => {
     if (visible) {
-      // Quando il toast diventa visibile, avviamo un timer per nasconderlo dopo 3 secondi (3000ms)
+      // Quando il toast diventa visibile, avviamo un timer per nasconderlo
       const timer = setTimeout(() => {
         onClose();
-      }, 3000);
+      }, 5000);
       return () => clearTimeout(timer);
     }
     // Se visible diventa false o il componente si smonta, puliamo il timer
