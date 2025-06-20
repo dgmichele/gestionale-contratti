@@ -4,9 +4,16 @@ import { BsFillTrash3Fill } from "react-icons/bs";
 
 function ContractCard({ contract, onEdit, onDelete, highlightType }) { // highlightType: 'new' | 'edited' | undefined
 
-  const isExpired = new Date(contract.data_scadenza) < new Date() && new Date(contract.data_scadenza).getDate() !== new Date().getDate();
-  const isExpiredToday = new Date(contract.data_scadenza).getDate() === new Date().getDate();
-  const isAlmostExpired = new Date(contract.data_scadenza) < new Date(new Date().setDate(new Date().getDate() + 7)) && new Date(contract.data_scadenza).getDate() !== new Date().getDate();
+  const today = new Date();
+  const contractDate = new Date(contract.data_scadenza);
+
+  // Imposta l'ora a 00:00:00 per entrambe le date per evitare problemi con l'ora del giorno
+  today.setHours(0, 0, 0, 0);
+  contractDate.setHours(0, 0, 0, 0);
+
+  const isExpired = contractDate < today;
+  const isExpiredToday = contractDate.getTime() === today.getTime();
+  const isAlmostExpired = contractDate > today && contractDate <= new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
 
   const formattedData = (dataISO) => {
     const data = new Date(dataISO);
