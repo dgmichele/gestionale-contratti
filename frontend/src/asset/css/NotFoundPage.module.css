@@ -1,8 +1,45 @@
+.header{
+  display: flex;
+  justify-content: center;
+  background-color: #fffbfc;
+  box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);
+  padding: 7px 0 7px 0;
+}
+
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  width: 90%;
+}
+
+.logo {
+  width: 75px;
+  margin-left: -5px;
+}
+
+@media (min-width: 768px) {
+  .headerContainer{
+    width: 95%;
+  }
+
+  .logo {
+  width: 75px;
+  margin-left: 0;
+}
+}
+
+@media (min-width: 1026px) {
+  .headerContainer{
+    max-width: 1300px;
+  }
+}
+
 .container {
   flex-grow: 1;
   text-align: center;
   padding: 4rem 1rem;
-  color: #333;
 }
 
 .container h1 {
@@ -12,43 +49,10 @@
 }
 
 .container p {
-  font-size: 1.2rem;
   margin-bottom: 1rem;
 }
 
-.container a:hover {
-  text-decoration: underline;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  margin-left: -10px;
-  align-items: center;
-  padding: 0.7rem 1.5rem;
-  background-color: #fffbfc;
-  position: relative;
-  box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);
-}
-
-.logo {
-  width: 50px;
-}
-
-@media (min-width: 768px) {
-  .logo {
-    width: 75px;
-    margin-left: -5px;
-  }
-}
-
-@media (min-width: 1026px) {
-  .header{
-    padding: 0.7rem 8rem;
-  }
-
-  .logo {
-    width: 75px;
-    margin-left: 0;
-  }
+.arrowIcon {
+  margin-bottom: -2px;
+  margin-left: 2px;
 }
