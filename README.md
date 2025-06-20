@@ -89,13 +89,13 @@ Da qui puoi muoverti nella cartella `frontend` o `backend` in base alle tue esig
 
 - per la modalità produzione crea invece un file `.env.production` (per collegarti al DB online come Supabase):
 
-  `NODE_ENV=production
+  NODE_ENV=production
 
-DATABASE_URL=il_tuo_link_supabase
+  DATABASE_URL=il_tuo_link_supabase
 
-WT_SECRET=tuo_segreto
+  JWT_SECRET=tuo_segreto
 
-JWT_SECRET_REFRESH=tuo_segreto`
+  JWT_SECRET_REFRESH=tuo_segreto`
 
 È importante che imposti le variabili di produzione nella sezione dedicata all'interno del server online che sceglierai, come Render. In questo modo Render si collega a Supabase e permette di rendere il DB raggiungibile dal client.
 
